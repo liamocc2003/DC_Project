@@ -6,12 +6,13 @@ import java.io.File;
 
 public class AddMessage {
     String message;
+    String username;
 
-    AddMessage(String message) {
+    AddMessage(String message, String username) {
         try {
             String currentDirectory = System.getProperty("user.dir");
-            FileWriter writeToFile = new FileWriter(new File(currentDirectory + "\\messageStorage.txt"), true);
-            writeToFile.write(message + System.lineSeparator());
+            FileWriter writeToFile = new FileWriter(new File(currentDirectory + "\\Message_System\\src\\messageStorage.txt"), true);
+            writeToFile.write(username + " - " + message + System.lineSeparator());
             writeToFile.close();
         }
         catch (IOException e) {

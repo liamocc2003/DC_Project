@@ -9,10 +9,12 @@ import java.io.*;
 
 public class MyServerDatagramSocket extends DatagramSocket {
     static final int MAX_LEN = 100;
+
     MyServerDatagramSocket(int portNo)
             throws SocketException {
         super(portNo);
     }
+
     public void sendMessage(InetAddress receiverHost, int receiverPort, String message)
            throws IOException {
         byte[] sendBuffer = message.getBytes();

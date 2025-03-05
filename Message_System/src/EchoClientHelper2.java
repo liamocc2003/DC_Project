@@ -18,9 +18,6 @@ public class EchoClientHelper2 {
       this.serverHost = InetAddress.getByName(hostName);
       this.serverPort = Integer.parseInt(portNum);
       this.mySocket = new MyStreamSocket(this.serverHost, this.serverPort);
-
-      System.out.println("\nConnection request completed." +
-              "\nCurrently logged on to server.");
    }
 	
    public String getEcho(String message)
@@ -31,7 +28,6 @@ public class EchoClientHelper2 {
 
    public void done()
            throws SocketException, IOException{
-      System.out.println("Connection closed.");
       mySocket.sendMessage(endMessage);
       mySocket.close();
    }
