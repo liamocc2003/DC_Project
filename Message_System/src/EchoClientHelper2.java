@@ -1,11 +1,6 @@
 import java.net.*;
 import java.io.*;
 
-/**
- * This class is a module which provides the application logic
- * for an Echo client using stream-mode socket.
- * @author M. L. Liu
- */
 
 public class EchoClientHelper2 {
    static final String endMessage = ".";
@@ -20,15 +15,15 @@ public class EchoClientHelper2 {
       this.mySocket = new MyStreamSocket(this.serverHost, this.serverPort);
    }
 	
-   public String getEcho(String message)
+   public String getEcho(String message, String username)
            throws SocketException, IOException{
-      mySocket.sendMessage(message);
+      mySocket.sendMessage(message, username);
       return message;
    }
 
-   public void done()
+   public void done(String username)
            throws SocketException, IOException{
-      mySocket.sendMessage(endMessage);
+      mySocket.sendMessage(endMessage, username);
       mySocket.close();
    }
 }

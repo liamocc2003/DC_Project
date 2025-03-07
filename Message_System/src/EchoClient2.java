@@ -6,19 +6,35 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * This module contains the presentaton logic of an Echo Client.
- * @author M. L. Liu
- */
+
 public class EchoClient2 {
    static final String endMessage = ".";
+
+   private static class ClientHelper{
+      private EchoClientHelper2 helper;
+
+      public void setHelper(String hostname, String portNum)
+         throws IOException{
+         helper = new EchoClientHelper2(hostname, portNum);
+      }
+
+      public void done(String username)
+              throws IOException{
+         helper.done(username);
+      }
+
+      public String getEcho(String message, String username)
+              throws IOException {
+         message = helper.getEcho(message, username);
+         return message;
+      }
+   }
 
    public static void main(String[] args) {
       String currentDirectory = System.getProperty("user.dir") + "\\";
       File MessageStorage = new File(currentDirectory + "Message_system\\src\\" + "messageStorage.txt");
 
-      EchoClientHelper2 helper;
-
+      final ClientHelper helper = new ClientHelper();
       JFrame frame = new JFrame();
 
       // Create Starting Page to connect to server
@@ -232,32 +248,48 @@ public class EchoClient2 {
          @Override
          public void actionPerformed(ActionEvent e) {
             if (!usernameText.getText().isEmpty()){
-               frame.setVisible(false);
-               title2.setVisible(false);
-               usernameLabel.setVisible(false);
-               usernameText.setVisible(false);
-               passwordLabel.setVisible(false);
-               passwordText.setVisible(false);
-               loginButton.setVisible(false);
+               String hostName = hostNameText.getText();
+               String portNum = portNumText.getText();
+               if (hostName.isEmpty()) {
+                  hostName = "localhost";
+               }
+               if (portNum.isEmpty()) {
+                  portNum = "1";
+               }
 
-               frame.add(title3);
-               frame.add(choiceLabel);
-               frame.add(uploadMessage);
-               frame.add(retrieveMessages);
-               frame.add(downloadOne);
-               frame.add(downloadAll);
-               frame.add(logout);
-               frame.add(confirmChoice);
+               try {
+                  helper.setHelper(hostName, portNum);
 
-               title3.setVisible(true);
-               choiceLabel.setVisible(true);
-               uploadMessage.setVisible(true);
-               retrieveMessages.setVisible(true);
-               downloadOne.setVisible(true);
-               downloadAll.setVisible(true);
-               logout.setVisible(true);
-               confirmChoice.setVisible(true);
-               frame.setVisible(true);
+                  frame.setVisible(false);
+                  title2.setVisible(false);
+                  usernameLabel.setVisible(false);
+                  usernameText.setVisible(false);
+                  passwordLabel.setVisible(false);
+                  passwordText.setVisible(false);
+                  loginButton.setVisible(false);
+
+                  frame.add(title3);
+                  frame.add(choiceLabel);
+                  frame.add(uploadMessage);
+                  frame.add(retrieveMessages);
+                  frame.add(downloadOne);
+                  frame.add(downloadAll);
+                  frame.add(logout);
+                  frame.add(confirmChoice);
+
+                  title3.setVisible(true);
+                  choiceLabel.setVisible(true);
+                  uploadMessage.setVisible(true);
+                  retrieveMessages.setVisible(true);
+                  downloadOne.setVisible(true);
+                  downloadAll.setVisible(true);
+                  logout.setVisible(true);
+                  confirmChoice.setVisible(true);
+                  frame.setVisible(true);
+               }
+               catch (Exception ex) {
+                  ex.printStackTrace();
+               }
             }
             else {
                JOptionPane.showMessageDialog(null, "Username is required to use chat system in server.", "Username Required", JOptionPane.ERROR_MESSAGE);
@@ -269,17 +301,6 @@ public class EchoClient2 {
       confirmChoice.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-            EchoClientHelper2 helper = null;
-
-            String hostName = hostNameText.getText();
-            String portNum = portNumText.getText();
-            if (hostName.isEmpty()) {
-               hostName = "localhost";
-            }
-            if (portNum.isEmpty()) {
-               portNum = "1";
-            }
-
             try {
                if (uploadMessage.isSelected()) {
                   frame.setVisible(false);
@@ -352,8 +373,8 @@ public class EchoClient2 {
                }
                else if (logout.isSelected()) {
                   try {
-                     helper = new EchoClientHelper2(hostName, portNum);
-                     helper.done();
+                     String username = usernameText.getText();
+                     helper.done(username);
 
                      frame.setVisible(false);
                      title3.setVisible(false);
@@ -398,8 +419,6 @@ public class EchoClient2 {
       uploadMessageButton.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-            EchoClientHelper2 helper = null;
-
             String username = usernameText.getText();
             String message = uploadMessageText.getText();
 
@@ -413,9 +432,7 @@ public class EchoClient2 {
             }
 
             try{
-               helper = new EchoClientHelper2(hostName, portNum);
-
-               message = helper.getEcho(message);
+               message = helper.getEcho(message, username);
                new AddMessage(message, username);
 
                frame.setVisible(false);

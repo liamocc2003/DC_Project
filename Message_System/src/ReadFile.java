@@ -6,9 +6,6 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class ReadFile {
-    InputStreamReader is = new InputStreamReader(System.in);
-    BufferedReader br = new BufferedReader(is);
-
     String currentDirectory = System.getProperty("user.dir") + "\\";
     File MessageStorage = new File(currentDirectory + "Message_system\\src\\" + "messageStorage.txt");
 

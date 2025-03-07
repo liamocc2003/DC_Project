@@ -1,11 +1,7 @@
 import java.net.*;
 import java.io.*;
 
-/**
- * A wrapper class of Socket which contains 
- * methods for sending and receiving messages
- * @author M. L. Liu
- */
+
 public class MyStreamSocket extends Socket {
    private Socket socket;
    private BufferedReader input;
@@ -33,12 +29,14 @@ public class MyStreamSocket extends Socket {
       output = new PrintWriter(new OutputStreamWriter(outStream));
    }
 
-   public void sendMessage(String message)
+   public void sendMessage(String message, String username)
            throws IOException {
-      if (message.equals(endMessage)){
-         output.print("Session over." + "\n");
+      if (!message.equals(endMessage)) {
+         output.print(username + ": " + message + "\n");
       }
-      output.print(message + "\n");
+      else{
+         output.print(username + " logged out. Session over.\n");
+      }
       output.flush();
    }
 
